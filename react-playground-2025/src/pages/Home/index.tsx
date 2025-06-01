@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState, useTransition } from "react";
-import EventListenerEg from "../../components/AbortControllerEg/EventListenerEg";
-import UseStatePassAsFn from "../../components/UseStatePassAsFn";
+import Settings from "../Settings";
+// import EventListenerEg from "../../components/AbortControllerEg/EventListenerEg";
+// import UseStatePassAsFn from "../../components/UseStatePassAsFn";
 
 const Home = () => {
   const [togglePage, setPageToggle] = useState(false);
@@ -10,8 +11,9 @@ const Home = () => {
   const AboutPageView = lazy(() => import('../About'));
 
   return <>
-    <UseStatePassAsFn />
-    <EventListenerEg />
+    {/* <UseStatePassAsFn />
+    <EventListenerEg /> */}
+    <Settings />
     <section>
       <button onClick={() => {
         setTransition(() => {
@@ -24,7 +26,6 @@ const Home = () => {
       <Suspense fallback={<div>Loading...</div>}>
         {togglePage ? <QAPageView /> : <AboutPageView />}
       </Suspense>
-      
     </section>
   </>;
 };
