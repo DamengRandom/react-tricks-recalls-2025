@@ -39,42 +39,41 @@ function UserList({ users, searchTerm }) {
 ```jsx
 import React, { useState, useCallback } from 'react';
 
-// ✅ Optimized with React.memo (only re-renders if props change)
-const TodoItem = React.memo(({ id, text, onDelete }) => {
-  console.log(`TodoItem ${id} re-rendered!`); // Now only logs when necessary
+// Child component that relies on function reference stability
+const ExpensiveChildComponent = React.memo(({ onClick }: { onClick: (id: number) => void }) => {
+  console.log('Child component rendered'); // Only logs when props actually change
+  
   return (
     <div>
-      <span>{text}</span>
-      <button onClick={() => onDelete(id)}>Delete</button>
+      <button onClick={() => onClick(1)}>Action 1</button>
+      <button onClick={() => onClick(2)}>Action 2</button>
     </div>
   );
 });
 
-function TodoList() {
-  const [todos, setTodos] = useState([
-    { id: 1, text: "Learn React" },
-    { id: 2, text: "Master Hooks" },
-  ]);
-  const [counter, setCounter] = useState(0);
+function ParentComponent() {
+  const [count, setCount] = useState(0);
+  const [items, setItems] = useState<string[]>([]);
 
-  // ✅ Better: useCallback ensures `handleDelete` is memoized
-  const handleDelete = useCallback((id) => {
-    setTodos(currentTodos => currentTodos.filter(todo => todo.id !== id));
-  }, []); // No dependencies (stable reference)
+  // With useCallback - stable function reference
+  const handleClick = useCallback((id: number) => {
+    console.log(`Action ${id} clicked`);
+    setItems(prev => [...prev, `Action ${id} at ${new Date().toISOString()}`]);
+  }, []); // Empty dependencies = never recreates
 
   return (
     <div>
-      <button onClick={() => setCounter(counter + 1)}>
-        Increment Counter ({counter})
+      <button onClick={() => setCount(c => c + 1)}>
+        Increment: {count}
       </button>
-      {todos.map(todo => (
-        <TodoItem
-          key={todo.id}
-          id={todo.id}
-          text={todo.text}
-          onDelete={handleDelete} // ✅ Now stable (no re-renders)
-        />
-      ))}
+      
+      <ExpensiveChildComponent onClick={handleClick} />
+      
+      <ul>
+        {items.map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -83,25 +82,52 @@ function TodoList() {
 ## memo
 
 - When a component re-renders with the same props (shallow comparison).
+- Pure functional components that always render the same output for the same props
+- Components that render often with the same props
+- Medium-to-large components where re-rendering is expensive
+- Components that cause child component re-renders unnecessarily
 - Example: Pure presentational components (buttons, lists).
 
 ```jsx
-import { memo, useState } from "react";
+import React, { memo } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-// Without `memo`, this re-renders every time `Parent` updates
-const ExpensiveComponent = memo(({ text }) => {
-  console.log("ExpensiveComponent re-rendered");
-  return <div>{text}</div>;
+interface ChartProps {
+  data: {
+    name: string;
+    value: number;
+  }[];
+  dimensions: { width: number; height: number };
+  color?: string;
+}
+
+const DataChart = memo(({ data, dimensions, color = '#8884d8' }: ChartProps) => {
+  console.log('Chart rendering'); // Only when props change
+  
+  return (
+    <BarChart
+      width={dimensions.width}
+      height={dimensions.height}
+      data={data}
+      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="value" fill={color} />
+    </BarChart>
+  );
+}, (prevProps, nextProps) => {
+  // Custom comparison - only re-render if data or dimensions change
+  return (
+    prevProps.data === nextProps.data &&
+    prevProps.dimensions.width === nextProps.dimensions.width &&
+    prevProps.dimensions.height === nextProps.dimensions.height &&
+    prevProps.color === nextProps.color
+  );
 });
 
-function Parent() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div>
-      <button onClick={() => setCount(count + 1)}>Re-render Parent</button>
-      <ExpensiveComponent text="Static Text" />
-    </div>
-  );
-}
+export default DataChart;
 ```

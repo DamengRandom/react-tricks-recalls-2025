@@ -8,7 +8,6 @@ Lazy loading is a technique that allows you to load a component only when it is 
 
 ## How to use
 
-
 ```tsx
 import { lazy } from 'react';
 

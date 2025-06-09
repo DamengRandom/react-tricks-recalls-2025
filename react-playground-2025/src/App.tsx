@@ -1,11 +1,11 @@
 import QuickHeader from './components/Shared/QuickHeader'
-import Home from './pages/Home'
+import AppRoutes from './Routes'
 
 function App() {
   return (
     <main>
       <QuickHeader />
-      <Home />
+      <AppRoutes />
     </main>
   )
 }

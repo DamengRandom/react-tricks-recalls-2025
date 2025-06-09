@@ -15,7 +15,7 @@ The Virtual DOM is then compared to the real DOM, and the changes are applied to
 Phase 1: Render
 
 1. Component Render: the components return JSX
-2. JSX Transformation: babel converts JSX to React.createElement() calls
+2. JSX Transformation: babel converts JSX to `React.createElement()` calls
 3. Virtual Tree Creation: create a lightweight JavaScript object representing UI
 
 Phase 2: Reconciliation
@@ -27,14 +27,14 @@ Phase 2: Reconciliation
 Phase 3: Commit
 
 7. DOM Updates: apply the changes to the real DOM in an optimal way
-8. Lifecycle Hooks: calls effects (Eg: call useLayoutEffect before useEffect)
+8. Lifecycle Hooks: calls effects (Eg: call `useLayoutEffect` before `useEffect`)
 
 
 ### About the diffing algorithm:
 
 1. Tree diff strategy: 
 
-- O(n) as time complexity:  Uses heuristic algorithm instead of precise diff
+- O(n) as time complexity: Uses heuristic algorithm instead of precise diff
 - Breadth-first comparison: compare the root nodes first, then the children nodes (level by level)
 
 2. Element type comparison:
@@ -55,9 +55,8 @@ Phase 3: Commit
 
 After React version 16, the diffing algorithm is improved:
 
-Fiber: a new reconciliation algorithm
+`Fiber`: a new reconciliation algorithm
 
-- Incremental rendering: split work into chunks ~
+- Incremental rendering: split work into smaller chunks ~
 - Priority based updates: allows React to prioritize updates based on user interactions (eg: scheduler: prioritize updates) ~
-
 - Error boundaries: granular error handling ~

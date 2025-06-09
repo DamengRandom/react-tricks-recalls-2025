@@ -1,8 +1,17 @@
+import { Link } from "react-router-dom";
+
 const QuickHeader = () => {
   return (
-    <div>
+    <>
       <h5>Quick Header</h5>
-    </div>
+      <div>
+        <Link to="/">Home</Link> |
+        <Link to="/about">About</Link> |
+        <Link to="/use-effect">Use Effect</Link> |
+        <Link to="/settings">Settings</Link> |
+        <Link to="/qa">QA</Link>
+      </div>
+    </>
   );
 };
 
