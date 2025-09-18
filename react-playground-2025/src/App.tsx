@@ -1,3 +1,4 @@
+import OwnUseRouter from './components/OwnUseRouter'
 import QuickHeader from './components/Shared/QuickHeader'
 import AppRoutes from './Routes'
 
@@ -6,6 +7,7 @@ function App() {
     <main>
       <QuickHeader />
       <AppRoutes />
+      <OwnUseRouter />
     </main>
   )
 }
