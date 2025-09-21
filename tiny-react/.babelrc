@@ -1,0 +1,10 @@
+{
+  "presets": [
+    ["@babel/preset-env", { "targets": { "esmodules": true } }]
+  ],
+  "plugins": [
+    ["@babel/plugin-transform-react-jsx", { 
+      "pragma": "TinyReact.createElement" // Babel will read this pragma and use it to transform JSX
+    }]
+  ]
+}
