@@ -3,7 +3,7 @@
 
 ## Basic Concept
 
-Lazy loading is a technique that allows you to load a component only when it is needed. This can help improve the performance of your application by reducing the initial load time and the amount of code that needs to be downloaded.
+Lazy loading is a technique that allows you to `load a component only when it is needed`. This can help improve the performance of your application by reducing the initial load time and the amount of code that needs to be downloaded.
 
 
 ## How to use
