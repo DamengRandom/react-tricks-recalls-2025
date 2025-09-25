@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "scan": "vite dev & npx react-scan@latest http://localhost:5173"
+    "scan": "vite dev & npx react-scan@latest http://localhost:5173",
+    "serve:api": "json-server --watch public/mocks/db.json --port 3001"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.74.8",
@@ -26,6 +27,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "json-server": "^1.0.0-beta.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1"
