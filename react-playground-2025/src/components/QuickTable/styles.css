@@ -1,0 +1,55 @@
+.quick-table {
+  width: 100%;
+  border-collapse: collapse; /* The adjacent cell borders are merged into a single border. The gap between cells is removed (border-spacing is ignored), so you get clean, continuous grid lines. */
+}
+
+.quick-table__header th {
+  background-color: aliceblue;
+  color: black;
+  text-align: left;
+}
+
+.quick-table__header th:not(:last-child) {
+  border-right: 1px solid #000;
+}
+
+.quick-table__header th:first-child {
+  border-left: 1px solid aliceblue;
+}
+
+.quick-table__header th:last-child {
+  border-right: 1px solid aliceblue;
+}
+
+.quick-table__body td {
+  border-top: none;
+  border: 1px solid aliceblue;
+}
+
+.quick-table__header th,
+.quick-table__body td {
+  padding: 4px 8px;
+}
+
+.quick-table__search-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+.quick-table__select {
+  padding: 4px 8px;
+  font-size: 14px;
+  background-color: aliceblue;
+  color: #333;
+  cursor: pointer;
+  min-width: 150px;
+}
+
+.quick-table__search-text {
+  padding: 4px 8px;
+  font-size: 14px;
+  flex: 1;
+  min-width: 200px;
+}
