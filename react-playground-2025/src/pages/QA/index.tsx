@@ -1,3 +1,6 @@
+import DoubleDropdown from "../../components/DoubleDropdown";
+import RecursiveListDemo from "../../components/RecursiveListDemo";
+
 const useTransitionHookNote = `
   useTransition is a hook that allows you to manage the transition state of a component.
   
@@ -10,6 +13,8 @@ const useTransitionHookNote = `
 const QA = () => {
   return <div>
     <p>{useTransitionHookNote}</p>
+    <DoubleDropdown />
+    <RecursiveListDemo />
   </div>;
 };
 

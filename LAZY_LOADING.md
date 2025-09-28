@@ -31,17 +31,19 @@ const Home = () => {
 
   const QAPageView = lazy(() => import('../QA'));
   const AboutPageView = lazy(() => import('../About'));
+  const handlePageToggle = () => {
+    setTransition(() => {
+      setPageToggle(!togglePage);
+    });
+  };
 
   return <>
     <UseStatePassAsFn />
     <EventListenerEg />
     <section>
-      <button onClick={() => {
-        setTransition(() => {
-          setPageToggle(!togglePage);
-        });
-      }}>
-        Toggle Page View {isTransitioning && <span style={{ marginLeft: '8px' }}>Transitioning...</span>}
+      <button onClick={handlePageToggle}>
+        Toggle Page View
+        {isTransitioning && <span className="transition-state">Transitioning...</span>}
       </button>
       
       <Suspense fallback={<div>Loading...</div>}>
