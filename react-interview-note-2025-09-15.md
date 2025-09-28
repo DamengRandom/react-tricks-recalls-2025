@@ -88,11 +88,11 @@ function MyFunctionalComponent() {
 
 ### useMemo
 
-- return a cacheable value - optimize purpose (performance)
+- return a cacheable value - optimize for expensive calculation purpose (performance)
 
 ### useCallback
 
-- return a cachable function - optimize purpose (performance)
+- return a cachable function - optimize for caching the function for preventing re-render purpose (performance)
 
 ### useRef
 
