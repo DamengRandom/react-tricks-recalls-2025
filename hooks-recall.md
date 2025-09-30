@@ -63,3 +63,77 @@ const AnotherUseRefHookFnExample = () => {
 
 export default AnotherUseRefHookFnExample;
 ```
+
+
+## memo
+
+```tsx
+// Child level component
+import { memo } from "react";
+
+export default function FeedItem = memo(({
+  id,
+  content,
+  imageUrl,
+  likes,
+  isLiked,
+  onLike,
+}) => {
+  console.log(`Rendering FeedItem ${id}`); // This will log only when props actually change 
+
+  return (
+    <div className="feed-item">
+      <p>{content}</p>
+      <img
+        src={imageUrl}
+        alt={`Feed item image ${id}`}
+        loading="lazy"
+        width="100%"
+      />
+
+      <button onClick={() => onLike(id)}>{isLiked ? 'Unlike' : 'Like'} {likes} likes</button>
+    </div>
+  );
+});
+// In useCallback will write parent component
+```
+
+## useCallback
+
+```tsx
+import { useCallback } from 'react';
+
+export default function Feed() {
+  const [feedItems, setFeedItems] = useState([]);
+
+  const handleLike = useCallback(async (id) => {
+    // optimistic update
+    setFeedItems(currentItems => currentItems.map(item => item.id === id ? { ..item, likes: item.likes + 1, isLiked: true } : item));
+    //  await fetch(`/api/posts/${id}/like`, { method: 'POST' }, []);
+    await fetchItems(id);
+  }, []);
+
+  return (
+    <div className="feed">
+      {feedItems.map(item => (
+        {/* Now, we can see from this parent component, we call child component, and child component has `memo` which prevent unnecessary re-renders */}
+        <FeedItem
+          key={item.id}
+          id={item.id}
+          content={item.content}
+          imageUrl={item.imageUrl}
+          likes={item.likes}
+          isLiked={item.isLiked}
+          onLike={handleLike}
+        />
+      ))}
+    </div>
+  );
+}
+```
+
+## useMemo
+
+```tsx
+// @TODO
+```

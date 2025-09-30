@@ -97,3 +97,103 @@ function UserList() {
   );
 }
 ```
+
+### Lazy Loading Images & Video Implemnetations
+
+```tsx
+import { useRef, useState } from 'react';
+
+const lazyMedia = ({ src, type = 'image', alt, width, height }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+        observer.disconnect();
+      }
+    });
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  if (type === 'image') {
+    return (
+      <img
+        ref={ref}
+        src={isVisible ? src : ''}
+        alt={alt}
+        width={width}
+        height={height}
+        loading="lazy"
+        className="feed-media"
+      />
+    )
+  }
+
+  if (type === 'video') {
+    return (
+      <div ref={ref} className="video-container">
+        {
+          !isVisible ? (
+            <img
+              src={`${src}?thumbnail=true`}
+              alt={`Video: ${alt}`}
+              width={width}
+              height={height}
+              className="video-poster"
+            />
+          ) : (
+            <video
+              width={width}
+              height={height}
+              controls
+              preload="none" // don't load video until user interacts
+              className="feed-video"
+            >
+              <source src={src} ytpe="video/mp4" />
+            </video>
+          )
+        }
+      </div>
+    );
+  }
+
+  return <p>Only support Image, Video media type for now ..</p>
+};
+```
+
+```tsx
+import React from 'react';
+import LazyMedia from './LazyMedia';
+
+// enhanced feed item component
+const EnhancedFeedItem = React.memo(({ // prevent re-renders when parents update but item props haven't changed
+  id,
+  content,
+  imageUrl,
+  likes,
+  isLiked,
+  onLike
+}) => {
+  return (
+    <div className="feed-item">
+      <p>{ content }</p>
+      <LazyMedia
+        src={imageUrl}
+        type="image"
+        alt={`Feed Image: ${id}`}
+        width={400}
+        height={300}
+      />
+    </div>
+  );
+});
+
+export default EnhancedFeedItem;
+```
