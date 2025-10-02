@@ -1,3 +1,4 @@
+import DogTable from "../../components/DogTable";
 import DoubleDropdown from "../../components/DoubleDropdown";
 import RecursiveListDemo from "../../components/RecursiveListDemo";
 
@@ -13,7 +14,11 @@ const useTransitionHookNote = `
 const QA = () => {
   return <div>
     <p>{useTransitionHookNote}</p>
+    <p>############################################################################</p>
+    <DogTable />
+    <p>############################################################################</p>
     <DoubleDropdown />
+    <p>############################################################################</p>
     <RecursiveListDemo />
   </div>;
 };
