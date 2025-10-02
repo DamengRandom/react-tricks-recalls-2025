@@ -1,5 +1,101 @@
 # Hook functions Recalls
 
+## useEffect
+
+### Common use cases
+
+1. Fetching data from an API when component mounts
+
+```tsx
+useEffect(() => {
+  fetchingData();
+}, []);
+```
+
+2. Subscribing & Unsubscribing events
+
+```tsx
+useEffect(() => {
+  window.addEventListener("resize", handleResize);
+
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+```
+
+3. Times / Intervals
+
+```tsx
+useEffect(() => {
+  const id = setInterval(() => setTime(Date.now()), 1000);
+
+  return () => clearInterval(id);
+}, []);
+```
+
+### Common mistakes of using useEffect hooks
+
+1. Forget to add dependency array
+
+```tsx
+useEffect(() => {
+  fetchingData();
+}); // ❌ forget to add dependency array []
+```
+
+2. Incorrect depdencies
+
+```tsx
+useEffect(() => {
+  fetchingData(user.id);
+}, []); // ❌ user.id not tracked
+```
+
+3. Forget to cleanup
+
+```tsx
+useEffect(() => {
+  window.addEventListener("resize", handleResize);
+}, []); // ❌ forget to add clean up by running `return` function : return () => window.removeEventListener("resize", handleResize);
+```
+
+4. MOST IMPORTANT ONE: Async directly in useEffect
+
+```tsx
+useEffect(async () => {
+  await fetchData();
+}, []); // ❌ WRONG !!!!!!!!!!!!!!!!!!!
+```
+
+```tsx
+useEffect(() => {
+  let isMounted = true;
+  const fetchDataFn = async () => {
+    const res = await fetch(url);
+    if (!isMounted) return;
+
+    const json = await res.json();
+
+    if (isMounted) {
+      setFetchData(json);
+    }
+  };
+
+  fetchDataFn();
+
+  return () => {
+    isMounted = false;
+  }
+}, []);
+```
+
+5. Infinite loop
+
+```tsx
+useEffect(() => {
+  setCount(count + 1); // ❌ cause infinite loop
+}, [count]);
+```
+
 ## useRef
 
 - This hook function will not re-render the component when the value changes.
