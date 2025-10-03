@@ -1,32 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { DogProps } from "./types";
 import { useDogsFetch } from "./useFetchDogs";
 import debounce from "./debounce";
 
 export default function DogTable() {
   const { dogs, isLoading, error } = useDogsFetch();
-  const [currentDogs, setCurentDogs] = useState<DogProps[]>([]);
   const [sortBy, setSortBy] = useState<keyof DogProps>("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    setCurentDogs(dogs);
-  }, [dogs]);
-
-  const handleSelect = (value: keyof DogProps) => {
-    setSortBy(value);
-    setCurentDogs(dogs);
-  };
-
-  const debounceSearch = useMemo(() => debounce((value: string) => {
-    if (!value) return setCurentDogs(dogs);
-    const filterd = dogs.filter(dog => String(dog[sortBy])?.toLowerCase()?.includes(value.toLowerCase()));
-
-    setCurentDogs(filterd);
-  }, 500), [dogs, sortBy]);
+  const debouncedSetSearch = useMemo(() => debounce((value: string) => {
+    setSearchTerm(value);
+  }, 500), []);
 
   const searchFilter = (value: string) => {
-    debounceSearch(value);
+    debouncedSetSearch(value);
   };
 
   const compareValues = (a: unknown, b: unknown) => {
@@ -36,17 +24,22 @@ export default function DogTable() {
 
   const sortFilter = (column: keyof DogProps) => {
     const nextOrder = sortBy === column ? (sortOrder === "asc" ? "desc" : "asc") : "asc";
-    const sorted = dogs.sort((a, b) => {
-      const result = compareValues(a[column], b[column]);
-      return nextOrder === "asc" ? result : -result;
-    });
     setSortBy(column);
     setSortOrder(nextOrder);
-    setCurentDogs(sorted);
   };
 
+  const visibleDogs = useMemo(() => {
+    const base = dogs;
+    const filtered = searchTerm
+      ? base.filter(dog => String(dog[sortBy])?.toLowerCase()?.includes(searchTerm.toLowerCase()))
+      : base;
+    return [...filtered].sort((a, b) => {
+      const result = compareValues(a[sortBy], b[sortBy]);
+      return sortOrder === "asc" ? result : -result;
+    });
+  }, [dogs, searchTerm, sortBy, sortOrder]);
+
   if (isLoading) return <div>Loading ..</div>;
-  
   if (error) return <div>Error on fetching dogs ..</div>;
 
   return <div>
@@ -54,7 +47,7 @@ export default function DogTable() {
     <div>
       {/* Search filter */}
       <label htmlFor="search">Search by: </label>
-      <select id="search" value={sortBy} onChange={e => handleSelect(e.target.value as keyof DogProps)}>
+      <select id="search" value={sortBy} onChange={e => setSortBy(e.target.value as keyof DogProps)}>
         <option value="name">Name</option>
         <option value="breed">Breed</option>
         <option value="age_years">Age (Years)</option>
@@ -73,7 +66,7 @@ export default function DogTable() {
         </tr>
       </thead>
       <tbody>
-        {currentDogs && currentDogs.map((dog: DogProps) => (
+        {visibleDogs && visibleDogs.map((dog: DogProps) => (
           <tr key={`${dog.id}-${dog.name}`}>
             <td>{dog.id}</td>
             <td>{dog.name}</td>
