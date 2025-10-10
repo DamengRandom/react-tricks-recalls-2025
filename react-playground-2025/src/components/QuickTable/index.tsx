@@ -53,6 +53,7 @@ const QuickTableAlternative = () => {
 
   if (state.error) return <TableError error={state.error} />;
 
+  // We can understand this Table component is followed with composition design pattern, so we have TableFilters, TableHeader and TableBody components all put together as a composition QuickTable component
   return (
     <>
       <div className="table-controls">
