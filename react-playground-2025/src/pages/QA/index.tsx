@@ -12,7 +12,7 @@ const useTransitionHookNote = `
 `;
 
 const QA = () => {
-  return <div>
+  return <>
     <p>{useTransitionHookNote}</p>
     <p>############################################################################</p>
     <DogTable />
@@ -20,7 +20,8 @@ const QA = () => {
     <DoubleDropdown />
     <p>############################################################################</p>
     <RecursiveListDemo />
-  </div>;
+    <p>############################################################################</p>
+  </>;
 };
 
 export default QA;

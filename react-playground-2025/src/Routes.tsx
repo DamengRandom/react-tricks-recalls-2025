@@ -4,6 +4,7 @@ import About from './pages/About';
 import UseEffect from './components/UseEffect';
 import Settings from './pages/Settings';
 import QA from './pages/QA';
+import Gigs from './pages/Gigs';
 
 function AppRoutes() {
   return (
@@ -13,6 +14,7 @@ function AppRoutes() {
       <Route path="/qa" element={<QA />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/use-effect" element={<UseEffect />} />
+      <Route path="/gigs" element={<Gigs />} />
     </Routes>
   );
 }
